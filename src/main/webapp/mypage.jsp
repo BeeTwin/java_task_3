@@ -10,12 +10,13 @@
 <p>Created at <%= new Date() %></p>
 <%
     DirectoryModel model = (DirectoryModel) request.getAttribute("directory");
+    String nickname = (String) request.getAttribute("nickname");
 %>
 <h1><%= model.FullPath %></h1>
 <a <%
     if (model.ParentPath != null) {
 %>
-        href="./?path=<%= model.ParentPath %>"
+        href="./?path=<%=model.ParentPath%>&nickname=<%=nickname%>"
 <%
     }
 %>>
@@ -32,7 +33,7 @@
     %>
     <tr align="left">
         <th>
-            <a href="./?path=<%= child.FullPath %>">
+            <a href="./?path=<%=child.FullPath%>&nickname=<%=nickname%>">
                 <%= child.Name %>
             </a>
         </th>

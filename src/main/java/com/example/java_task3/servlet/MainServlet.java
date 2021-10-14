@@ -1,5 +1,7 @@
 package com.example.java_task3.servlet;
 
+import com.example.java_task3.Consts;
+import com.example.java_task3.accounts.AccountService;
 import com.example.java_task3.logic.model.DirectoryModel;
 import com.example.java_task3.logic.model.FileModel;
 
@@ -21,10 +23,17 @@ public class MainServlet extends HttpServlet {
     private final String _pathParam = "path";
     private final String _modelName = "directory";
     private final String _jspPage = "mypage.jsp";
+    private final String _nicknameParam = "nickname";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+        var nickname = req.getParameter(_nicknameParam);
+
+        if (!AccountService.isAuthorized(nickname)) {
+            resp.sendRedirect(Consts.Urls.LoginUrl);
+        }
+
         var path = req.getParameter(_pathParam);
         if (path == null) {
             path = getRootDirectory();
@@ -64,6 +73,7 @@ public class MainServlet extends HttpServlet {
                 childrenModels);
         
         req.setAttribute(_modelName, model);
+        req.setAttribute(_nicknameParam, nickname);
         req.getRequestDispatcher(_jspPage).forward(req, resp);
     }
 
